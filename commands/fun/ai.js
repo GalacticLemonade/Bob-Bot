@@ -59,6 +59,8 @@ module.exports = {
 
             context = mainresponse.context
 
+            console.log(respond)
+
             await interaction.editReply({ content: respond});
           })
           .catch((error) => {
