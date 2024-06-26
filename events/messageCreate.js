@@ -35,6 +35,8 @@ async function lastmessages(msg) {
 
 async function mmmmm(message) {
     const channelid = message.channel.id
+    const content = message.content
+    const authorname = message.author.username
 
     context = JSON.parse(fs.readFileSync('context.txt', 'utf8'))
     let startingPrompt = fs.readFileSync('prompt.txt', 'utf8')
@@ -42,11 +44,11 @@ async function mmmmm(message) {
     let passTwo = passOne.replaceAll("{{Time}}", new Date().toLocaleTimeString())
     let passThree = passTwo.replaceAll("{{Date}}", new Date().toLocaleDateString())
     let passFour = passThree.replaceAll("{{DiscordID}}", message.author.id)
-    let passFive = passFour.replaceAll("{{DiscordUsername}}", message.author.username)
+    let passFive = passFour.replaceAll("{{DiscordUsername}}", authorname)
     let passSix = passFive.replaceAll("{{Channel}}", message.channel.name)
     let passSeven = passSix.replaceAll("{{OnlineUsers}}", await onlineUsers(message))
     let passEight = passSeven.replaceAll("{{LastMessages}}", await lastmessages(message))
-    let finalPrompt = passEight.replaceAll("{{UserInput}}", message.content)
+    let finalPrompt = passEight.replaceAll("{{UserInput}}", content)
 
     let data = JSON.stringify({
         "model": "llama3",
@@ -80,7 +82,7 @@ async function mmmmm(message) {
         
         message.reply({ content: respond })
             .catch(err => {
-                message.channel.send({ content: respond })
+                message.channel.send({ content: "`" + authorname + ": " + content + "`\r\n\r\n" + respond })
             })
       })
       .catch((error) => {
