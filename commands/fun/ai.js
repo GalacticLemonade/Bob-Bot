@@ -27,8 +27,9 @@ module.exports = {
         let passOne = startingPrompt.replaceAll("{{MemberCount}}", interaction.guild.memberCount)
         let passTwo = passOne.replaceAll("{{Time}}", new Date().toLocaleTimeString())
         let passThree = passTwo.replaceAll("{{Date}}", new Date().toLocaleDateString())
-        let passFour = passThree.replaceAll("{{DiscordUsername}}", interaction.member.displayName)
-        let finalPrompt = passFour.replaceAll("{{UserInput}}", interaction.options.getString('text'))
+        let passFour = passThree.replaceAll("{{DiscordID}}", interaction.member.id)
+        let passFive = passFour.replaceAll("{{DiscordUsername}}", interaction.member.displayName)
+        let finalPrompt = passFive.replaceAll("{{UserInput}}", interaction.options.getString('text'))
 
         let data = JSON.stringify({
             "model": "llama3",
@@ -52,15 +53,15 @@ module.exports = {
           
           axios.request(config)
           .then(async (response) => {
-            let mainresponse = response.data //JSON.stringify(response.data);
+            let mainresponse = response.data
             let respond = mainresponse.response
+
             context = mainresponse.context
+
             await interaction.editReply({ content: respond});
           })
           .catch((error) => {
             console.log(error);
           });
-
-		//await interaction.reply({ content: 'Echoed', ephemeral: true });
 	},
 };
