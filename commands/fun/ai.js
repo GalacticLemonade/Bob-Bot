@@ -23,13 +23,8 @@ module.exports = {
 		}
 
         await interaction.deferReply();
-        
-        let passOne = startingPrompt.replaceAll("{{MemberCount}}", interaction.guild.memberCount)
-        let passTwo = passOne.replaceAll("{{Time}}", new Date().toLocaleTimeString())
-        let passThree = passTwo.replaceAll("{{Date}}", new Date().toLocaleDateString())
-        let passFour = passThree.replaceAll("{{DiscordID}}", interaction.member.id)
-        let passFive = passFour.replaceAll("{{DiscordUsername}}", interaction.member.displayName)
-        let finalPrompt = passFive.replaceAll("{{UserInput}}", interaction.options.getString('text'))
+
+        let finalPrompt = interaction.options.getString('text')
 
         let data = JSON.stringify({
             "model": "llama3",
@@ -61,7 +56,9 @@ module.exports = {
 
             console.log(respond)
 
-            await interaction.editReply({ content: respond});
+            interaction.editReply({ content: "API request made" })
+
+            await interaction.channel.send({ content: respond});
           })
           .catch((error) => {
             console.log(error);
