@@ -24,7 +24,7 @@ module.exports = {
 				{ name: '4.', value: 'This server is english only. As such, refrain from other languages.' },
 				{ name: '5.', value: 'If you spread misinformation about bob, you will be 1984\'d (silenced).' },
 				{ name: '6.', value: 'Abide by Discord TOS.' },
-				{ name: '7.', value: 'Use common sense. Do not exploit loopholes.' }
+				{ name: '7.', value: 'Use common sense. Do not exploit loopholes.' },
 			)
 			.setTimestamp()
 			.setFooter({ text: 'Last updated' })

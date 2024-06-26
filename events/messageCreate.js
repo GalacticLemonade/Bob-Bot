@@ -5,7 +5,7 @@ const botDevID = '596209842906071040'
 
 let context
 
-function mmmmm(message) {
+async function mmmmm(message) {
     if (message.content.includes("-raw") && message.author.id == botDevID) {
         let content = message.content.replaceAll("-raw", "")
         let data = JSON.stringify({
@@ -36,7 +36,7 @@ function mmmmm(message) {
     
             context = mainresponse.context
     
-            message.channel.send({ content: respond});
+            message.reply({ content: respond});
           })
           .catch((error) => {
             console.log(error);
@@ -72,6 +72,8 @@ function mmmmm(message) {
         },
         data : data
       };
+
+      await message.channel.sendTyping();
       
       axios.request(config)
       .then(async (response) => {
@@ -80,19 +82,7 @@ function mmmmm(message) {
 
         context = mainresponse.context
 
-        if (respond.includes("|<-|-|-|")) {
-            let m = respond.replaceAll("|<-|-|-|", " ")
-            let q = m.trim()
-            message.reply({content: q})
-        }
-
-        if (respond.includes("|-|-|-|")) {
-            let m = respond.replaceAll("|-|-|-|", " ")
-            let q = m.trim()
-            message.reply({ content: q })
-        } else {
-            message.channel.send({ content: respond});
-        }
+        message.reply({ content: respond});
       })
       .catch((error) => {
         console.log(error);
@@ -109,10 +99,12 @@ module.exports = {
 
         if (content.includes('bob') || msg.content.includes('<@1190741398874501140>')) {
             mmmmm(msg)
+            return
         }
 
-        if (!isntReply && msg.mentions.repliedUser.id == 1190741398874501140) { //msg.channel.messages.fetch(msg.reference.messageId)[0].author.id == 1190741398874501140) {
+        if (!isntReply && msg.mentions.repliedUser.id == 1190741398874501140) {
             mmmmm(msg)
+            return
         }
 	},
 };
