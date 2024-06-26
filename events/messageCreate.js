@@ -34,6 +34,8 @@ async function lastmessages(msg) {
 }
 
 async function mmmmm(message) {
+    const channelid = message.channel.id
+
     context = JSON.parse(fs.readFileSync('context.txt', 'utf8'))
     let startingPrompt = fs.readFileSync('prompt.txt', 'utf8')
     let passOne = startingPrompt.replaceAll("{{MemberCount}}", message.guild.memberCount)
@@ -75,13 +77,20 @@ async function mmmmm(message) {
         let respond = mainresponse.response
 
         fs.writeFileSync("context.txt", JSON.stringify(mainresponse.context), "utf8")
-
-        message.reply({ content: respond});
+        
+        message.reply({ content: respond })
+            .catch(err => {
+                message.channel.send({ content: respond })
+            })
       })
       .catch((error) => {
         console.log(error);
       });
 }
+
+process.on('unhandledRejection', (reason, promise) => {
+	console.log('Unhandled Rejection at:', reason.stack || reason)
+  })
 
 module.exports = {
 	name: Events.MessageCreate,
