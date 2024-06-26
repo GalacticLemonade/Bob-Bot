@@ -34,7 +34,7 @@ module.exports = {
             "model": "llama3",
             "prompt": finalPrompt,
             "stream": false,
-            //"context": context,
+            "context": context,
             "options": {
                 "seed": Math.floor(new Date().getTime() / 1000)
             }
