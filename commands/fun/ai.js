@@ -61,7 +61,7 @@ module.exports = {
             await interaction.channel.send({ content: respond});
           })
           .catch((error) => {
-            console.log(error);
+            interaction.channel.send({ content: error});
           });
 	},
 };
