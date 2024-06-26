@@ -3,9 +3,10 @@ const fs = require('node:fs')
 const axios = require("axios")
 const botDevID = '596209842906071040'
 
-let context
+let context = JSON.parse(fs.readFileSync('context.txt', 'utf8'))
 
 async function mmmmm(message) {
+    context = JSON.parse(fs.readFileSync('context.txt', 'utf8'))
     if (message.content.includes("-raw") && message.author.id == botDevID) {
         let content = message.content.replaceAll("-raw", "")
         let data = JSON.stringify({
@@ -35,6 +36,8 @@ async function mmmmm(message) {
             let respond = mainresponse.response
     
             context = mainresponse.context
+            console.log(JSON.stringify(mainresponse.context))
+            fs.writeFileSync("context.txt", JSON.stringify(mainresponse.context), "utf8")
     
             message.reply({ content: respond});
           })
@@ -80,7 +83,7 @@ async function mmmmm(message) {
         let mainresponse = response.data
         let respond = mainresponse.response
 
-        context = mainresponse.context
+        fs.writeFileSync("context.txt", JSON.stringify(mainresponse.context), "utf8")
 
         message.reply({ content: respond});
       })
