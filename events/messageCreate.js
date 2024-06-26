@@ -1,10 +1,49 @@
 const { Events } = require('discord.js');
 const fs = require('node:fs')
 const axios = require("axios")
+const botDevID = '596209842906071040'
 
 let context
 
 function mmmmm(message) {
+    if (message.content.includes("-raw") && message.author.id == botDevID) {
+        let content = message.content.replaceAll("-raw", "")
+        let data = JSON.stringify({
+            "model": "llama3",
+            "prompt": content,
+            "stream": false,
+            "context": context,
+            "options": {
+                "seed": Math.floor(new Date().getTime() / 1000)
+            },
+            "keep_alive": "24h"
+          });
+          
+          let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'http://localhost:11434/api/generate',
+            headers: { 
+              'Content-Type': 'application/json'
+            },
+            data : data
+          };
+          
+          axios.request(config)
+          .then(async (response) => {
+            let mainresponse = response.data
+            let respond = mainresponse.response
+    
+            context = mainresponse.context
+    
+            message.channel.send({ content: respond});
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+          return;
+    }
+
     let startingPrompt = fs.readFileSync('prompt.txt', 'utf8')
     let passOne = startingPrompt.replaceAll("{{MemberCount}}", message.guild.memberCount)
     let passTwo = passOne.replaceAll("{{Time}}", new Date().toLocaleTimeString())
@@ -41,6 +80,12 @@ function mmmmm(message) {
 
         context = mainresponse.context
 
+        if (respond.includes("|<-|-|-|")) {
+            let m = respond.replaceAll("|<-|-|-|", " ")
+            let q = m.trim()
+            message.reply({content: q})
+        }
+
         if (respond.includes("|-|-|-|")) {
             let m = respond.replaceAll("|-|-|-|", " ")
             let q = m.trim()
@@ -62,7 +107,7 @@ module.exports = {
         let content = msg.content.toLowerCase()
         let isntReply = msg.reference === null
 
-        if (content.includes('hey bob') || msg.content.includes('<@1190741398874501140>')) {
+        if (content.includes('bob') || msg.content.includes('<@1190741398874501140>')) {
             mmmmm(msg)
         }
 
