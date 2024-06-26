@@ -46,8 +46,6 @@ async function mmmmm(message) {
     let passEight = passSeven.replaceAll("{{LastMessages}}", await lastmessages(message))
     let finalPrompt = passEight.replaceAll("{{UserInput}}", message.content)
 
-    console.log(finalPrompt)
-
     let data = JSON.stringify({
         "model": "llama3",
         "prompt": finalPrompt,
