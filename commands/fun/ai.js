@@ -38,7 +38,8 @@ module.exports = {
             "context": context,
             "options": {
                 "seed": Math.floor(new Date().getTime() / 1000)
-            }
+            },
+            "keep_alive": "24h"
           });
           
           let config = {
