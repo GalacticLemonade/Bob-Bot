@@ -97,7 +97,7 @@ process.on('unhandledRejection', (reason, promise) => {
 module.exports = {
 	name: Events.MessageCreate,
 	async execute(msg) {
-		if (msg.author.bot) { return }
+		if (msg.author.bot && msg.author.id !== 1198797018982776942) { return }
 
         let content = msg.content.toLowerCase()
         let isntReply = msg.reference === null
